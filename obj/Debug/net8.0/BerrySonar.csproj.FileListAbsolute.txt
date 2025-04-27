@@ -1,0 +1,17 @@
+/home/teodor/Desktop/BerrySonar/bin/Debug/net8.0/BerrySonar
+/home/teodor/Desktop/BerrySonar/bin/Debug/net8.0/BerrySonar.deps.json
+/home/teodor/Desktop/BerrySonar/bin/Debug/net8.0/BerrySonar.runtimeconfig.json
+/home/teodor/Desktop/BerrySonar/bin/Debug/net8.0/BerrySonar.dll
+/home/teodor/Desktop/BerrySonar/bin/Debug/net8.0/BerrySonar.pdb
+/home/teodor/Desktop/BerrySonar/bin/Debug/net8.0/System.Device.Gpio.dll
+/home/teodor/Desktop/BerrySonar/obj/Debug/net8.0/BerrySonar.csproj.AssemblyReference.cache
+/home/teodor/Desktop/BerrySonar/obj/Debug/net8.0/BerrySonar.GeneratedMSBuildEditorConfig.editorconfig
+/home/teodor/Desktop/BerrySonar/obj/Debug/net8.0/BerrySonar.AssemblyInfoInputs.cache
+/home/teodor/Desktop/BerrySonar/obj/Debug/net8.0/BerrySonar.AssemblyInfo.cs
+/home/teodor/Desktop/BerrySonar/obj/Debug/net8.0/BerrySonar.csproj.CoreCompileInputs.cache
+/home/teodor/Desktop/BerrySonar/obj/Debug/net8.0/BerrySonar.csproj.Up2Date
+/home/teodor/Desktop/BerrySonar/obj/Debug/net8.0/BerrySonar.dll
+/home/teodor/Desktop/BerrySonar/obj/Debug/net8.0/refint/BerrySonar.dll
+/home/teodor/Desktop/BerrySonar/obj/Debug/net8.0/BerrySonar.pdb
+/home/teodor/Desktop/BerrySonar/obj/Debug/net8.0/BerrySonar.genruntimeconfig.cache
+/home/teodor/Desktop/BerrySonar/obj/Debug/net8.0/ref/BerrySonar.dll
