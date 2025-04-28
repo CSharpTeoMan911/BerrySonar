@@ -15,3 +15,5 @@
 /home/teodor/Desktop/BerrySonar/obj/Debug/net8.0/BerrySonar.pdb
 /home/teodor/Desktop/BerrySonar/obj/Debug/net8.0/BerrySonar.genruntimeconfig.cache
 /home/teodor/Desktop/BerrySonar/obj/Debug/net8.0/ref/BerrySonar.dll
+/home/teodor/Desktop/BerrySonar/obj/Debug/net8.0/BerrySonar.sourcelink.json
+/home/teodor/Desktop/BerrySonar/bin/Debug/net8.0/Newtonsoft.Json.dll

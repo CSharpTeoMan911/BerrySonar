@@ -3,6 +3,7 @@
     using System.Device.Gpio;
     using System.Timers;
 
+
     internal class Program
     {
 
@@ -12,7 +13,7 @@
 
 
         private static float degree = 0;
-        private static int coil = 0;
+        private static int step = 0;
         private static int step_counter = 0;
         private static bool switch_direction = false;
 
@@ -30,69 +31,80 @@
 
         private static GpioController gpioController = new GpioController(PinNumberingScheme.Board);
 
-        static void Main(string[] args)
+        static void Main()
+        {
+            Console.CancelKeyPress += (s, e) => Shutdown();
+            AppDomain.CurrentDomain.ProcessExit += (s, e) => Shutdown();
+            _= Operation();
+            Console.ReadKey();
+        }
+
+        private static async Task Operation()
         {
             try
             {
+                UninitializePins();
+
+                Metadata? metadata = await SonarPositionCache.ReadFile();
+
+                degree = metadata?.degree ?? 0;
+                step = metadata?.step ?? 0;
+                step_counter = metadata?.step_counter ?? 0;
+                switch_direction = metadata?.switch_direction ?? false;
+
+                AppDomain.CurrentDomain.ProcessExit += (s, e) =>
+                {
+                    UpdatePositionCacheFile();
+                    UninitializePins();
+                    gpioController?.Dispose();
+                };
+
                 InitializePins();
-                
+
+                                
                 // Attach event handler for echo pin
                 gpioController.RegisterCallbackForPinValueChangedEvent(echo, PinEventTypes.Falling | PinEventTypes.Rising, ReadUltrasonicSensor);
+
+
+                //ReadUltrasonicSensor();
 
                 Timer servoTimer = new Timer(10);
                 servoTimer.Elapsed += ServoMotorControl;
                 servoTimer.Start();
 
-                Timer ultrasonicTimer = new Timer(100);
-                ultrasonicTimer.Elapsed += SonarOperation;
-                ultrasonicTimer.Start();
-
-
-                Console.ReadKey();
+                Timer ultrasonicPulse = new Timer(100);
+                ultrasonicPulse.Elapsed += SonarOperation;
+                ultrasonicPulse.Start();
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-                return;
-            }
+            catch {}
         }
 
         private static void ServoMotorControl(object? sender, ElapsedEventArgs e)
         {
-            //Console.WriteLine($"Coil: {coil}, Step Counter: {step_counter}, Switch Direction: {switch_direction}, Degree: {degree}°");
+            //Console.WriteLine($"Step: {step}, Step Counter: {step_counter}, Switch Direction: {switch_direction}, Degree: {degree}°");
 
             if (switch_direction == false)
             {
-                if (coil > 4)
-                {
-                    coil = 0;
-                }
-
-                ExecuteServoStep(coil);
-
-                coil++;
+                ExecuteServoStep(step);
+                step++;
                 step_counter++;
-                degree += 0.17578125f; // 2048 steps => step = 0.17578125° => 0.17578125° * 2048 = 360°
+                degree += 0.0882526f;
 
-                if (step_counter == 2048)
+                if (step > 3) step = 0; // correct range check
+                if (step_counter >= 1024) // stop after half rotation
                 {
-                    coil = 4;
                     switch_direction = true;
                 }
             }
             else
             {
-                if (coil == 0)
-                {
-                    coil = 4;
-                }
-
-                ExecuteServoStep(coil);
-
-                coil--;
+                ExecuteServoStep(step);
+                step--;
                 step_counter--;
+                degree -= 0.0882526f;
 
-                if (step_counter == 0)
+                if (step < 0) step = 3; // reverse range check
+                if (step_counter <= 0)
                 {
                     switch_direction = false;
                 }
@@ -107,7 +119,6 @@
             gpioController.Write(trigger, PinValue.Low);
         }
 
-
         private static void ReadUltrasonicSensor(object? sender, PinValueChangedEventArgs e)
         {
             Console.WriteLine($"{e.ChangeType} detected on pin {echo}");
@@ -115,7 +126,6 @@
             {
                 double duration = (DateTime.Now - startTime).TotalSeconds;
                 double distance = duration * speed / 2; // Divide by 2 because the signal travels to the object and back
-
                 Console.WriteLine($"Distance: {distance} cm");
             }
         }
@@ -124,30 +134,30 @@
         private static void SonarOperation(object? sender, ElapsedEventArgs e) => TriggerUltrasonicSensor();
 
 
-        private static void ExecuteServoStep(int coil)
+        private static void ExecuteServoStep(int step)
         {
-            switch (coil)
+            switch (step)
             {
                 case 0:
                     gpioController.Write(coil1, PinValue.High);
-                    gpioController.Write(coil2, PinValue.Low);
+                    gpioController.Write(coil2, PinValue.High);
                     gpioController.Write(coil3, PinValue.Low);
                     gpioController.Write(coil4, PinValue.Low);
                     break;
                 case 1:
                     gpioController.Write(coil1, PinValue.Low);
                     gpioController.Write(coil2, PinValue.High);
-                    gpioController.Write(coil3, PinValue.Low);
+                    gpioController.Write(coil3, PinValue.High);
                     gpioController.Write(coil4, PinValue.Low);
                     break;
                 case 2:
                     gpioController.Write(coil1, PinValue.Low);
                     gpioController.Write(coil2, PinValue.Low);
                     gpioController.Write(coil3, PinValue.High);
-                    gpioController.Write(coil4, PinValue.Low);
+                    gpioController.Write(coil4, PinValue.High);
                     break;
                 case 3:
-                    gpioController.Write(coil1, PinValue.Low);
+                    gpioController.Write(coil1, PinValue.High);
                     gpioController.Write(coil2, PinValue.Low);
                     gpioController.Write(coil3, PinValue.Low);
                     gpioController.Write(coil4, PinValue.High);
@@ -201,10 +211,32 @@
         }
 
 
-        ~Program()
+        private static async void UpdatePositionCacheFile()
+        {
+            Metadata metadata = new Metadata
+            {
+                degree = degree,
+                step = step,
+                step_counter = step_counter,
+                switch_direction = switch_direction
+            };
+
+            Console.WriteLine($"Updating position cache file: {JsonSerialisation.SerializeToJson(metadata)}");
+
+            await SonarPositionCache.CreateFile(metadata);
+        }
+
+        private static async void Shutdown()
         {
             UninitializePins();
             gpioController?.Dispose();
+            await SonarPositionCache.CreateFile(new Metadata
+            {
+                degree = degree,
+                step = step,
+                step_counter = step_counter,
+                switch_direction = switch_direction
+            });
         }
     }
 }

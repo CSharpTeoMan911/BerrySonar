@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "jQJ+YFr4xwc=",
+  "dgSpecHash": "HmvxSacQABw=",
   "success": true,
   "projectFilePath": "/home/teodor/Desktop/BerrySonar/BerrySonar.csproj",
   "expectedPackageFiles": [
+    "/home/teodor/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512",
     "/home/teodor/.nuget/packages/system.device.gpio/3.2.0/system.device.gpio.3.2.0.nupkg.sha512"
   ],
   "logs": []
