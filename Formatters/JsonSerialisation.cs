@@ -4,7 +4,7 @@ namespace BerrySonar
 {
     class JsonSerialisation
     {
-        public static string? SerializeToJson<ObjectType>(ObjectType? data)
+        public static string? SerializeToJson<ObjectType>(ObjectType? data, bool prettyPrint = false)
         {
             try
             {
@@ -15,6 +15,7 @@ namespace BerrySonar
                         using (JsonWriter reader = new JsonTextWriter(st_writer))
                         {
                             JsonSerializer serializer = new JsonSerializer();
+                            serializer.Formatting = prettyPrint ? Formatting.Indented : Formatting.None;
                             serializer.Serialize(reader, data);
                             return st_writer.ToString();
                         }

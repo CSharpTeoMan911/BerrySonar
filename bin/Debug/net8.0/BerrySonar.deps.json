@@ -8,11 +8,45 @@
     ".NETCoreApp,Version=v8.0": {
       "BerrySonar/1.0.0": {
         "dependencies": {
+          "FirebaseAuthentication.net": "4.1.0",
+          "FirebaseDatabase.net": "5.0.0",
           "Newtonsoft.Json": "13.0.3",
           "System.Device.Gpio": "3.2.0"
         },
         "runtime": {
           "BerrySonar.dll": {}
+        }
+      },
+      "FirebaseAuthentication.net/4.1.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Firebase.Auth.dll": {
+            "assemblyVersion": "4.1.0.0",
+            "fileVersion": "4.1.0.0"
+          }
+        }
+      },
+      "FirebaseDatabase.net/5.0.0": {
+        "dependencies": {
+          "LiteDB": "5.0.17",
+          "Newtonsoft.Json": "13.0.3",
+          "System.Reactive": "6.0.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Firebase.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "LiteDB/5.0.17": {
+        "runtime": {
+          "lib/netstandard2.0/LiteDB.dll": {
+            "assemblyVersion": "5.0.17.0",
+            "fileVersion": "5.0.17.0"
+          }
         }
       },
       "Newtonsoft.Json/13.0.3": {
@@ -30,6 +64,14 @@
             "fileVersion": "3.200.24.32001"
           }
         }
+      },
+      "System.Reactive/6.0.0": {
+        "runtime": {
+          "lib/net6.0/System.Reactive.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.0.1"
+          }
+        }
       }
     }
   },
@@ -38,6 +80,27 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "FirebaseAuthentication.net/4.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pShi5v9cvT5bUWZDm261lO4uxJHvzOvpj46YHrL3uCB1WBeyCIcpoVakAQ2xHTu1dpmV86/BzSNRpqIGNp860g==",
+      "path": "firebaseauthentication.net/4.1.0",
+      "hashPath": "firebaseauthentication.net.4.1.0.nupkg.sha512"
+    },
+    "FirebaseDatabase.net/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-tU2JF31msyK30cN1fqcRfeyRikobOfx9FKmgHVINHSN0NnP+DqG89KkFdd5ebefDLthG4Ac9yLnXjOpeEX+52g==",
+      "path": "firebasedatabase.net/5.0.0",
+      "hashPath": "firebasedatabase.net.5.0.0.nupkg.sha512"
+    },
+    "LiteDB/5.0.17": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-cKPvkdlzIts3ZKu/BzoIc/Y71e4VFKlij4LyioPFATZMot+wB7EAm1FFbZSJez6coJmQUoIg/3yHE1MMU+zOdg==",
+      "path": "litedb/5.0.17",
+      "hashPath": "litedb.5.0.17.nupkg.sha512"
     },
     "Newtonsoft.Json/13.0.3": {
       "type": "package",
@@ -52,6 +115,13 @@
       "sha512": "sha512-jaL93IC1S2wZfCSLWt8/1lQCp/pDAzDNE5dfLq+pubEhCp0BjDZze6rJMu2KdOuCOeRxHmBuhtWrIRlrTKFsTg==",
       "path": "system.device.gpio/3.2.0",
       "hashPath": "system.device.gpio.3.2.0.nupkg.sha512"
+    },
+    "System.Reactive/6.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-31kfaW4ZupZzPsI5PVe77VhnvFF55qgma7KZr/E0iFTs6fmdhhG8j0mgEx620iLTey1EynOkEfnyTjtNEpJzGw==",
+      "path": "system.reactive/6.0.0",
+      "hashPath": "system.reactive.6.0.0.nupkg.sha512"
     }
   }
 }

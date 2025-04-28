@@ -4,7 +4,7 @@
     using System.Timers;
 
 
-    internal class Program
+    internal class Program:Firebase
     {
 
         // Sonar variables
@@ -45,28 +45,19 @@
             {
                 UninitializePins();
 
+                Config config = await SonarConfiguration.ReadConfig();
                 Metadata? metadata = await SonarPositionCache.ReadFile();
+
+                InitialiseDatabase(config);
 
                 degree = metadata?.degree ?? 0;
                 step = metadata?.step ?? 0;
                 step_counter = metadata?.step_counter ?? 0;
                 switch_direction = metadata?.switch_direction ?? false;
 
-                AppDomain.CurrentDomain.ProcessExit += (s, e) =>
-                {
-                    UpdatePositionCacheFile();
-                    UninitializePins();
-                    gpioController?.Dispose();
-                };
-
                 InitializePins();
 
-                                
-                // Attach event handler for echo pin
                 gpioController.RegisterCallbackForPinValueChangedEvent(echo, PinEventTypes.Falling | PinEventTypes.Rising, ReadUltrasonicSensor);
-
-
-                //ReadUltrasonicSensor();
 
                 Timer servoTimer = new Timer(10);
                 servoTimer.Elapsed += ServoMotorControl;
@@ -75,6 +66,13 @@
                 Timer ultrasonicPulse = new Timer(100);
                 ultrasonicPulse.Elapsed += SonarOperation;
                 ultrasonicPulse.Start();
+
+                Timer autheticationTimer = new Timer(1000);
+                autheticationTimer.Elapsed += (s, e) =>
+                {
+                    UpdatePositionCacheFile();
+                };
+                autheticationTimer.Start();
             }
             catch {}
         }
@@ -88,10 +86,10 @@
                 ExecuteServoStep(step);
                 step++;
                 step_counter++;
-                degree += 0.0882526f;
+                degree += 0.17578125f;
 
                 if (step > 3) step = 0; // correct range check
-                if (step_counter >= 1024) // stop after half rotation
+                if (step_counter >= 1024) 
                 {
                     switch_direction = true;
                 }
@@ -101,7 +99,7 @@
                 ExecuteServoStep(step);
                 step--;
                 step_counter--;
-                degree -= 0.0882526f;
+                degree -= 0.17578125f;
 
                 if (step < 0) step = 3; // reverse range check
                 if (step_counter <= 0)

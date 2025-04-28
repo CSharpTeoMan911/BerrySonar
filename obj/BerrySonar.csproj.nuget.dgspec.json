@@ -10,11 +10,11 @@
         "projectUniqueName": "/home/teodor/Desktop/BerrySonar/BerrySonar.csproj",
         "projectName": "BerrySonar",
         "projectPath": "/home/teodor/Desktop/BerrySonar/BerrySonar.csproj",
-        "packagesPath": "/home/teodor/.nuget/packages/",
+        "packagesPath": "/root/.nuget/packages/",
         "outputPath": "/home/teodor/Desktop/BerrySonar/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/teodor/.nuget/NuGet/NuGet.Config"
+          "/root/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -43,6 +43,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "FirebaseAuthentication.net": {
+              "target": "Package",
+              "version": "[4.1.0, )"
+            },
+            "FirebaseDatabase.net": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"

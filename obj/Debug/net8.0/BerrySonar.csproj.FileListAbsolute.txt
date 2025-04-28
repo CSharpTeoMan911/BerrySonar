@@ -17,3 +17,7 @@
 /home/teodor/Desktop/BerrySonar/obj/Debug/net8.0/ref/BerrySonar.dll
 /home/teodor/Desktop/BerrySonar/obj/Debug/net8.0/BerrySonar.sourcelink.json
 /home/teodor/Desktop/BerrySonar/bin/Debug/net8.0/Newtonsoft.Json.dll
+/home/teodor/Desktop/BerrySonar/bin/Debug/net8.0/Firebase.dll
+/home/teodor/Desktop/BerrySonar/bin/Debug/net8.0/LiteDB.dll
+/home/teodor/Desktop/BerrySonar/bin/Debug/net8.0/System.Reactive.dll
+/home/teodor/Desktop/BerrySonar/bin/Debug/net8.0/Firebase.Auth.dll
