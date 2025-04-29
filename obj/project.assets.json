@@ -235,7 +235,7 @@
     ]
   },
   "packageFolders": {
-    "/home/teodor/.nuget/packages/": {}
+    "/root/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
@@ -243,11 +243,11 @@
       "projectUniqueName": "/home/teodor/Desktop/BerrySonar/BerrySonar.csproj",
       "projectName": "BerrySonar",
       "projectPath": "/home/teodor/Desktop/BerrySonar/BerrySonar.csproj",
-      "packagesPath": "/home/teodor/.nuget/packages/",
+      "packagesPath": "/root/.nuget/packages/",
       "outputPath": "/home/teodor/Desktop/BerrySonar/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/teodor/.nuget/NuGet/NuGet.Config"
+        "/root/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"

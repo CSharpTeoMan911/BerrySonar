@@ -21,7 +21,7 @@ namespace BerrySonar
             try
             {
                 if (firebaseClient != null)
-                    await firebaseClient.Child("SonarData").PutAsync(JsonSerialisation.SerializeToJson(sonarData), TimeSpan.FromSeconds(2));
+                    await firebaseClient.Child("SonarData").PutAsync(JsonSerialisation.SerializeToJson(sonarData), TimeSpan.FromSeconds(5));
                 return false;
             }
             catch

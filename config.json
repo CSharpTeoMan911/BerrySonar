@@ -1,4 +1,4 @@
 {
-  "FirebaseDatabaseUrl": "https://berryradar-90834-default-rtdb.europe-west1.firebasedatabase.app",
-  "FirebaseDatabaseSecret": "8FBxH5b22ssS8As7xEKtUZGZjqWeXuv9AHlpG0rP"
+  "FirebaseDatabaseUrl": "Replace with your Firebase Database URL",
+  "FirebaseDatabaseSecret": "Replace with your Firebase Database Secret"
 }
