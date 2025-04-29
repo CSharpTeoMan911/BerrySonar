@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BerrySonar")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+863db9244bece43c3b66405850ff57c20fd8cbf6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d3b4bd4bcfc30ccefea73367617555aabd6bab4d")]
 [assembly: System.Reflection.AssemblyProductAttribute("BerrySonar")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BerrySonar")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

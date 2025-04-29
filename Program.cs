@@ -4,7 +4,7 @@
     using System.Timers;
 
 
-    internal class Program:Firebase
+    internal class Program : Firebase
     {
 
         // Sonar variables
@@ -15,6 +15,7 @@
         private static float degree = 0;
         private static int step = 0;
         private static int step_counter = 0;
+        private static double distance = 0;
         private static bool switch_direction = false;
 
         // Servo motor GPIO pins [29, 31, 33, 37] (coil1, coil2, coil3, coil4)
@@ -28,14 +29,17 @@
         private readonly static int echo = 38;
         private readonly static int trigger = 40;
 
+        private static bool errorShutdown = false;
 
         private static GpioController gpioController = new GpioController(PinNumberingScheme.Board);
+
+        private static Config? config;
 
         static void Main()
         {
             Console.CancelKeyPress += (s, e) => Shutdown();
             AppDomain.CurrentDomain.ProcessExit += (s, e) => Shutdown();
-            _= Operation();
+            _ = Operation();
             Console.ReadKey();
         }
 
@@ -43,12 +47,11 @@
         {
             try
             {
+                Console.WriteLine("Starting Sonar...");
                 UninitializePins();
 
-                Config config = await SonarConfiguration.ReadConfig();
+                config = await SonarConfiguration.ReadConfig();
                 Metadata? metadata = await SonarPositionCache.ReadFile();
-
-                InitialiseDatabase(config);
 
                 degree = metadata?.degree ?? 0;
                 step = metadata?.step ?? 0;
@@ -57,24 +60,39 @@
 
                 InitializePins();
 
-                gpioController.RegisterCallbackForPinValueChangedEvent(echo, PinEventTypes.Falling | PinEventTypes.Rising, ReadUltrasonicSensor);
-
                 Timer servoTimer = new Timer(10);
                 servoTimer.Elapsed += ServoMotorControl;
                 servoTimer.Start();
 
-                Timer ultrasonicPulse = new Timer(100);
+                Timer ultrasonicPulse = new Timer(150);
                 ultrasonicPulse.Elapsed += SonarOperation;
                 ultrasonicPulse.Start();
 
-                Timer autheticationTimer = new Timer(1000);
-                autheticationTimer.Elapsed += (s, e) =>
-                {
-                    UpdatePositionCacheFile();
-                };
-                autheticationTimer.Start();
+                Timer databaseWriter = new Timer(150);
+                databaseWriter.Elapsed += UpdatePositionData;
+                databaseWriter.Start();
+
+                gpioController.RegisterCallbackForPinValueChangedEvent(echo, PinEventTypes.Falling | PinEventTypes.Rising, ReadUltrasonicSensor);
             }
-            catch {}
+            catch { }
+        }
+
+        private static async void UpdatePositionData(object? sender, ElapsedEventArgs e)
+        {
+            if (errorShutdown == false)
+            {
+                errorShutdown = await UpdateSonarData(new SonarMetadata
+                {
+                    degree = degree,
+                    distance = distance
+                }, config);
+            }
+            else
+            {
+                ((Timer?)sender)?.Stop();
+                Console.WriteLine("Error detected. Shutting down...");
+                Environment.Exit(0);
+            }
         }
 
         private static void ServoMotorControl(object? sender, ElapsedEventArgs e)
@@ -89,7 +107,7 @@
                 degree += 0.17578125f;
 
                 if (step > 3) step = 0; // correct range check
-                if (step_counter >= 1024) 
+                if (step_counter >= 1024)
                 {
                     switch_direction = true;
                 }
@@ -119,12 +137,21 @@
 
         private static void ReadUltrasonicSensor(object? sender, PinValueChangedEventArgs e)
         {
-            Console.WriteLine($"{e.ChangeType} detected on pin {echo}");
-            if (e.ChangeType == PinEventTypes.Falling)
+            if (errorShutdown == false)
             {
-                double duration = (DateTime.Now - startTime).TotalSeconds;
-                double distance = duration * speed / 2; // Divide by 2 because the signal travels to the object and back
-                Console.WriteLine($"Distance: {distance} cm");
+                if (e.ChangeType == PinEventTypes.Falling)
+                {
+                    double duration = (DateTime.Now - startTime).TotalSeconds;
+                    distance = duration * speed / 2; // Divide by 2 because the signal travels to the object and back
+
+                    Console.WriteLine($"Distance: {distance} cm");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Error detected. Shutting down...");
+
+                Environment.Exit(0);
             }
         }
 
@@ -203,7 +230,7 @@
                 gpioController.ClosePin(echo);
                 gpioController.ClosePin(trigger);
 
-                //gpioController.UnregisterCallbackForPinValueChangedEvent(echo, ReadUltrasonicSensor);
+                gpioController.UnregisterCallbackForPinValueChangedEvent(echo, ReadUltrasonicSensor);
             }
             catch { }
         }
@@ -219,8 +246,6 @@
                 switch_direction = switch_direction
             };
 
-            Console.WriteLine($"Updating position cache file: {JsonSerialisation.SerializeToJson(metadata)}");
-
             await SonarPositionCache.CreateFile(metadata);
         }
 
@@ -228,6 +253,7 @@
         {
             UninitializePins();
             gpioController?.Dispose();
+
             await SonarPositionCache.CreateFile(new Metadata
             {
                 degree = degree,
@@ -235,6 +261,12 @@
                 step_counter = step_counter,
                 switch_direction = switch_direction
             });
+
+            errorShutdown = await UpdateSonarData(new SonarMetadata
+            {
+                degree = degree,
+                distance = distance
+            }, config);
         }
     }
 }

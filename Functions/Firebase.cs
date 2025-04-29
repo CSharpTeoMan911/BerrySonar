@@ -1,34 +1,43 @@
 using Firebase.Auth;
 using Firebase.Auth.Providers;
 using Firebase.Database;
+using Firebase.Database.Query;
 
 namespace BerrySonar
 {
     public class Firebase
     {
-        private static FirebaseClient? firebaseClient;
 
-        private static async Task LoadConfig()
+        protected static async Task<bool> UpdateSonarData(SonarMetadata sonarData, Config? config)
         {
-
-        } 
-
-
-        protected static void InitialiseDatabase(Config config)
-        {
-
-            firebaseClient = new FirebaseClient(
-                "https://your-database-url.firebaseio.com/",
-                new FirebaseOptions
+            try
+            {
+                if (config != null)
                 {
-                    AuthTokenAsyncFactory = () => Login(config)
-                });
-        }
+                    FirebaseClient firebaseClient = new FirebaseClient(
+                        config?.FirebaseDatabaseUrl,
+                        new FirebaseOptions
+                        {
+                            AuthTokenAsyncFactory = () => Task.FromResult(config?.FirebaseDatabaseSecret)
+                        });
 
-
-        protected static async Task<string> Login(Config config)
-        {   await client.CreateUserWithEmailAndPasswordAsync("email", "pwd", "Display Name");
-            return "";
+                    if (firebaseClient != null)
+                        await firebaseClient.Child("SonarData").PutAsync(JsonSerialisation.SerializeToJson(sonarData));
+                    return false;
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("\n\nError writing to the database. Check the Firebase configuration and/or the database permissions.\n\n");
+                    return true;
+                }
+            }
+            catch
+            {
+                Console.Clear();
+                Console.WriteLine("\n\nError writing to the database. Check the Firebase configuration and/or the database permissions.\n\n");
+                return true;
+            }
         }
     }
 }

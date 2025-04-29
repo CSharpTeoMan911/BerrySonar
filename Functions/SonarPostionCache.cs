@@ -13,11 +13,10 @@ namespace BerrySonar
                 using (FileStream fs = File.Open(filePath, FileMode.Create))
                 {
                     string? json = JsonSerialisation.SerializeToJson(metadata);
-
-                    using (StreamWriter sw = new StreamWriter(fs))
+                    
+                    if(json != null)
                     {
-                        await sw.WriteAsync(json);
-                        await sw.FlushAsync();
+                       await fs.WriteAsync(Encoding.UTF8.GetBytes(json)); 
                     }
                 }
             }

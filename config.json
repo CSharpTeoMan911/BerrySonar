@@ -1,7 +1,4 @@
 {
   "FirebaseDatabaseUrl": "Replace with your Firebase Database URL",
-  "FirebaseAuthUrl": "Replace with your Firebase Auth URL",
-  "FirebaseApiKey": "Replace with your Firebase API Key",
-  "email": "Replace with your Firebase admin account email",
-  "password": "Replace with your Firebase admin account password"
+  "FirebaseDatabaseSecret": "Replace with your Firebase Database Secret"
 }

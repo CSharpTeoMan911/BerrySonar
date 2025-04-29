@@ -11,7 +11,7 @@ namespace BerrySonar
 
             if (File.Exists(configFilePath) == true)
             {
-                using(FileStream fs = File.Open(configFilePath, FileMode.Open))
+                using (FileStream fs = File.Open(configFilePath, FileMode.Open))
                 {
                     byte[] buffer = new byte[fs.Length];
                     await fs.ReadAsync(buffer);
@@ -29,7 +29,7 @@ namespace BerrySonar
                 Console.Clear();
 
                 Console.WriteLine("\n\nConfig file not found. A new config file has been created.\n\n");
-                
+
                 Environment.Exit(0);
             }
 
@@ -47,9 +47,14 @@ namespace BerrySonar
 
             using (FileStream fs = File.Open(path, FileMode.Create))
             {
-                byte[] file = Encoding.UTF8.GetBytes(JsonSerialisation.SerializeToJson(defaultConfig, true));
-                await fs.WriteAsync(file);
-                await fs.FlushAsync();
+                string? data = JsonSerialisation.SerializeToJson(defaultConfig, true);
+
+                if (data != null)
+                {
+                    byte[] file = Encoding.UTF8.GetBytes(data);
+                    await fs.WriteAsync(file);
+                    await fs.FlushAsync();
+                }
             }
         }
     }
