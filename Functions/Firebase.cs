@@ -7,30 +7,22 @@ namespace BerrySonar
 {
     public class Firebase
     {
+        private static FirebaseClient? firebaseClient;
 
-        protected static async Task<bool> UpdateSonarData(SonarMetadata sonarData, Config? config)
+        protected static void InitateDatabase(Config config) => firebaseClient = new FirebaseClient(
+                                                                    config.FirebaseDatabaseUrl,
+                                                                    new FirebaseOptions
+                                                                    {
+                                                                        AuthTokenAsyncFactory = () => Task.FromResult(config.FirebaseDatabaseSecret)
+                                                                    });
+
+        protected static async Task<bool> UpdateSonarData(SonarMetadata sonarData)
         {
             try
             {
-                if (config != null)
-                {
-                    FirebaseClient firebaseClient = new FirebaseClient(
-                        config?.FirebaseDatabaseUrl,
-                        new FirebaseOptions
-                        {
-                            AuthTokenAsyncFactory = () => Task.FromResult(config?.FirebaseDatabaseSecret)
-                        });
-
-                    if (firebaseClient != null)
-                        await firebaseClient.Child("SonarData").PutAsync(JsonSerialisation.SerializeToJson(sonarData));
-                    return false;
-                }
-                else
-                {
-                    Console.Clear();
-                    Console.WriteLine("\n\nError writing to the database. Check the Firebase configuration and/or the database permissions.\n\n");
-                    return true;
-                }
+                if (firebaseClient != null)
+                    await firebaseClient.Child("SonarData").PutAsync(JsonSerialisation.SerializeToJson(sonarData), TimeSpan.FromSeconds(2));
+                return false;
             }
             catch
             {

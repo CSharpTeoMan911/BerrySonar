@@ -33,8 +33,6 @@
 
         private static GpioController gpioController = new GpioController(PinNumberingScheme.Board);
 
-        private static Config? config;
-
         static void Main()
         {
             Console.CancelKeyPress += (s, e) => Shutdown();
@@ -50,8 +48,10 @@
                 Console.WriteLine("Starting Sonar...");
                 UninitializePins();
 
-                config = await SonarConfiguration.ReadConfig();
+                Config config = await SonarConfiguration.ReadConfig();
                 Metadata? metadata = await SonarPositionCache.ReadFile();
+
+                InitateDatabase(config);
 
                 degree = metadata?.degree ?? 0;
                 step = metadata?.step ?? 0;
@@ -64,11 +64,11 @@
                 servoTimer.Elapsed += ServoMotorControl;
                 servoTimer.Start();
 
-                Timer ultrasonicPulse = new Timer(150);
+                Timer ultrasonicPulse = new Timer(100);
                 ultrasonicPulse.Elapsed += SonarOperation;
                 ultrasonicPulse.Start();
 
-                Timer databaseWriter = new Timer(150);
+                Timer databaseWriter = new Timer(100);
                 databaseWriter.Elapsed += UpdatePositionData;
                 databaseWriter.Start();
 
@@ -85,7 +85,7 @@
                 {
                     degree = degree,
                     distance = distance
-                }, config);
+                });
             }
             else
             {
@@ -266,7 +266,7 @@
             {
                 degree = degree,
                 distance = distance
-            }, config);
+            });
         }
     }
 }
