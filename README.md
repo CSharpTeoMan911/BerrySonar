@@ -8,10 +8,9 @@
 
 BerrySonar is a Linux-based C# application developed for the Raspberry Pi, designed to act as a DIY LIDAR system—similar in concept to the object detection systems used in autonomous vehicles like Teslas. It uses an ultrasonic sensor rotated by a stepper motor to scan a 180° field and detect nearby objects. The data is transmitted securely to a Firebase Realtime Database for monitoring and analysis. The GUI of the application is served as a **React** based application called [**berry-sonar-view**](https://github.com/CSharpTeoMan911/berry-sonar-view) that is getting the **LIDAR** metadata in real time using **Firebase real-time database** and rendering the data in a sonar UI element that is drew and redered dynamically in the browser 
 
-
+![BerrySonarUI-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/9cc8cfaa-de67-43fd-a39a-d0862947d435)
 
 https://github.com/user-attachments/assets/8e78da88-58d7-42f9-b4d3-cf6c0d95aeeb
-
 
 
 
