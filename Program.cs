@@ -29,8 +29,6 @@
         private readonly static int echo = 38;
         private readonly static int trigger = 40;
 
-        private static bool errorShutdown = false;
-
         private static GpioController gpioController = new GpioController(PinNumberingScheme.Board);
 
         static void Main()
@@ -60,7 +58,7 @@
 
                 InitializePins();
 
-                Timer servoTimer = new Timer(10);
+                Timer servoTimer = new Timer(25);
                 servoTimer.Elapsed += ServoMotorControl;
                 servoTimer.Start();
 
@@ -68,7 +66,7 @@
                 ultrasonicPulse.Elapsed += SonarOperation;
                 ultrasonicPulse.Start();
 
-                Timer databaseWriter = new Timer(100);
+                Timer databaseWriter = new Timer(300);
                 databaseWriter.Elapsed += UpdatePositionData;
                 databaseWriter.Start();
 
@@ -79,20 +77,12 @@
 
         private static async void UpdatePositionData(object? sender, ElapsedEventArgs e)
         {
-            if (errorShutdown == false)
+            await UpdateSonarData(new SonarMetadata
             {
-                errorShutdown = await UpdateSonarData(new SonarMetadata
-                {
-                    degree = degree,
-                    distance = distance
-                });
-            }
-            else
-            {
-                ((Timer?)sender)?.Stop();
-                Console.WriteLine("Error detected. Shutting down...");
-                Environment.Exit(0);
-            }
+                degree = degree,
+                distance = distance,
+                switch_direction = switch_direction
+            });
         }
 
         private static void ServoMotorControl(object? sender, ElapsedEventArgs e)
@@ -137,21 +127,12 @@
 
         private static void ReadUltrasonicSensor(object? sender, PinValueChangedEventArgs e)
         {
-            if (errorShutdown == false)
+            if (e.ChangeType == PinEventTypes.Falling)
             {
-                if (e.ChangeType == PinEventTypes.Falling)
-                {
-                    double duration = (DateTime.Now - startTime).TotalSeconds;
-                    distance = duration * speed / 2; // Divide by 2 because the signal travels to the object and back
+                double duration = (DateTime.Now - startTime).TotalSeconds;
+                distance = duration * speed / 2; // Divide by 2 because the signal travels to the object and back
 
-                    Console.WriteLine($"Distance: {distance} cm");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Error detected. Shutting down...");
-
-                Environment.Exit(0);
+                Console.WriteLine($"Distance: {distance} cm");
             }
         }
 
@@ -262,7 +243,7 @@
                 switch_direction = switch_direction
             });
 
-            errorShutdown = await UpdateSonarData(new SonarMetadata
+            await UpdateSonarData(new SonarMetadata
             {
                 degree = degree,
                 distance = distance
