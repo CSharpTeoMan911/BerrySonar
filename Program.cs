@@ -31,6 +31,11 @@
 
         private static GpioController gpioController = new GpioController(PinNumberingScheme.Board);
 
+        private static Timer servoTimer = new Timer(25);
+        private static Timer ultrasonicPulse = new Timer(100);
+        private static Timer databaseWriter = new Timer(300);
+        
+
         static void Main()
         {
             Console.CancelKeyPress += (s, e) => Shutdown();
@@ -58,15 +63,12 @@
 
                 InitializePins();
 
-                Timer servoTimer = new Timer(25);
                 servoTimer.Elapsed += ServoMotorControl;
                 servoTimer.Start();
 
-                Timer ultrasonicPulse = new Timer(100);
                 ultrasonicPulse.Elapsed += SonarOperation;
                 ultrasonicPulse.Start();
 
-                Timer databaseWriter = new Timer(300);
                 databaseWriter.Elapsed += UpdatePositionData;
                 databaseWriter.Start();
 
@@ -216,20 +218,6 @@
             catch { }
         }
 
-
-        private static async void UpdatePositionCacheFile()
-        {
-            Metadata metadata = new Metadata
-            {
-                degree = degree,
-                step = step,
-                step_counter = step_counter,
-                switch_direction = switch_direction
-            };
-
-            await SonarPositionCache.CreateFile(metadata);
-        }
-
         private static async void Shutdown()
         {
             UninitializePins();
@@ -248,6 +236,10 @@
                 degree = degree,
                 distance = distance
             });
+
+            servoTimer?.Dispose();
+            ultrasonicPulse?.Dispose();
+            databaseWriter?.Dispose();
         }
     }
 }
