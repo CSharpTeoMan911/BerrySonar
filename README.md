@@ -86,24 +86,34 @@ sudo -i && ./BerrySonar
 
 🌀 Tiny but mighty! This 5V stepper motor rotates the ultrasonic sensor to scan the surroundings.
 
-![ElectricMotor](https://github.com/user-attachments/assets/fbac3535-ee24-4bf6-b57c-ff5c545c7df9)
+<div align=left >
+  <img width=500 src="https://github.com/user-attachments/assets/fbac3535-ee24-4bf6-b57c-ff5c545c7df9"/>
+</div>
 
+
+<br/>
 <br/>
 
 #### ⚙️ ULN2003A Stepper Motor Driver Board
 
 🧠 The brain behind the motor! Controls the motor's stepping sequence and power delivery.
 
-![Motor driver board](https://github.com/user-attachments/assets/86c08075-af29-41e2-974a-137d16061d17)
+<div align=left >
+  <img width=500 src="https://github.com/user-attachments/assets/86c08075-af29-41e2-974a-137d16061d17"/>
+</div>
 
 
+<br/>
 <br/>
 
 #### 📡 HC-SR04 Ultrasonic Distance Sensor
 
 👀 The “eyes” of BerrySonar. Sends sound waves and listens for echoes to measure object distances.
 
-![0_kWvvleZumndFiR0l](https://github.com/user-attachments/assets/357da6d0-c4aa-4fcc-992a-714fb9cbc2a5)
+<div align=left >
+  <img width=500 src="https://github.com/user-attachments/assets/357da6d0-c4aa-4fcc-992a-714fb9cbc2a5"/>
+</div>
+
 
 <br/>
 
