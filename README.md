@@ -109,7 +109,7 @@ sudo -i && ./BerrySonar
 
 🔩🧰 Hardware Configuration and Wiring
 
-![BerrySonar pinnout legent schematic](https://github.com/user-attachments/assets/caa196f6-8a6b-4306-99c4-52fe0525cd95)
+![BerrySonar pinnout legent schematic](https://github.com/user-attachments/assets/c9c23ffa-060f-4d21-9f7d-6c69aede8bb8)
 
 
 
