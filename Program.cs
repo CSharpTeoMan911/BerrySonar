@@ -34,6 +34,8 @@
         private static Timer servoTimer = new Timer(25);
         private static Timer ultrasonicPulse = new Timer(100);
         private static Timer databaseWriter = new Timer(300);
+
+        private static bool shutdown;
         
 
         static void Main()
@@ -41,7 +43,7 @@
             Console.CancelKeyPress += (s, e) => Shutdown();
             AppDomain.CurrentDomain.ProcessExit += (s, e) => Shutdown();
             _ = Operation();
-            Console.ReadKey();
+            while(shutdown == false);
         }
 
         private static async Task Operation()
@@ -220,6 +222,8 @@
 
         private static async void Shutdown()
         {
+            shutdown = true;
+
             UninitializePins();
             gpioController?.Dispose();
 

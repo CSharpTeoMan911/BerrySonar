@@ -1,0 +1,12 @@
+# Replace the 'ExecStart' and 'WorkingDirectory' values with your path to the BerrySonar binary
+
+[Unit]
+Description="Backend service that has the functionality of a radar"
+After=network.target
+
+[Service]
+WorkingDirectory=/etc
+ExecStart=/etc/BerrySonar/BerrySonar
+
+[Install]
+WantedBy=multi-user.target
