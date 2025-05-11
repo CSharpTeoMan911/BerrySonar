@@ -37,7 +37,7 @@ https://github.com/user-attachments/assets/8e78da88-58d7-42f9-b4d3-cf6c0d95aeeb
 ## 🧱 Tech Stack
 * Programming Language: C# (.NET Core)
 
-* Platform: Linux (Raspberry Pi OS)
+* Platform: Linux (Ubuntu Server)
 
 * Cloud: Firebase Realtime Database
 
